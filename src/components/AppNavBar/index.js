@@ -14,6 +14,11 @@ const AppNavBar = () => {
             <div className="tabWrapper">
                 <NavBarTab
                     icon='user outline'
+                    path={ROUTE.ORGANIZATIONS_ROUTE}
+                    name='Організації'
+                />
+                <NavBarTab
+                    icon='user outline'
                     path={ROUTE.EMPLOYEES_ROUTE}
                     name='Працівники'
                 />

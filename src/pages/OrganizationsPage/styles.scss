@@ -1,0 +1,78 @@
+@import "src/styles/colors";
+
+#OrganizationsPage {
+
+  .SearchBar {
+    width: 100%;
+    padding: 10px 15px;
+    background: $white;
+    box-shadow: $shadow;
+    border-radius: 5px;
+    margin-bottom: 15px;
+  }
+
+  .OrganizationsList {
+    background: $white;
+    border-radius: 5px;
+    box-shadow: $shadow;
+    .header {
+      display: flex;
+      padding: 8px 10px;
+
+      .logo {
+        width: 90px;
+      }
+
+      .name {
+        width: 200px;
+        padding: 0 20px;
+      }
+
+      .description {
+        flex: 1 1 auto;
+        max-width: 50%;
+      }
+
+      .discount {
+        width: 120px;
+      }
+    }
+
+    .OrganizationsListItem {
+      display: flex;
+      padding: 8px 10px;
+      align-items: center;
+      border-bottom: 1.5px solid $white_2;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .logo {
+        width: 90px;
+        height: 90px;
+        border-radius: 100%;
+
+        img {
+          width: 90px;
+          height: 90px;
+          border-radius: 100%;
+        }
+      }
+
+      .name {
+        width: 200px;
+        padding: 0 20px;
+      }
+
+      .description {
+        flex: 1 1 auto;
+        max-width: 50%;
+      }
+
+      .discount {
+        width: 120px;
+      }
+    }
+  }
+}

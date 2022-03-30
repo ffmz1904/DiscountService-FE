@@ -3,6 +3,7 @@ import AuthPage from "../pages/AuthPage";
 import DashboardPage from "../pages/DashboardPage";
 import ProfilePage from "../pages/ProfilePage";
 import EmployeesPage from "../pages/EmployeesPage";
+import OrganizationsPage from "../pages/OrganizationsPage";
 
 export const publicRoutes = [
     {
@@ -23,6 +24,10 @@ export const authRoutes = [
     {
         path: ROUTE.EMPLOYEES_ROUTE,
         Component: EmployeesPage,
+    },
+    {
+        path: ROUTE.ORGANIZATIONS_ROUTE,
+        Component: OrganizationsPage,
     },
     // {
     //     path: ROUTE.DELIVERY_MEN_EARNING_ROUTE + '/:id',
