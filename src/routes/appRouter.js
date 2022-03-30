@@ -1,8 +1,8 @@
 import React from 'react';
 import { authRoutes, publicRoutes } from "./routes";
-import {Navigate, Route, Routes} from "react-router-dom";
-import PrivatePageWrapper from "../components/privatePageWrapper";
+import {Redirect, Route, Switch} from "react-router-dom";
 import {AUTH_ROUTE, DASHBOARD_ROUTE} from "./routesConstant";
+import PrivatePageWrapper from "../components/PrivatePageWrapper";
 
 const AppRouter = ({ isAuth }) => {
     return (
@@ -11,21 +11,21 @@ const AppRouter = ({ isAuth }) => {
                 isAuth ?
                     <PrivatePageWrapper
                         child={
-                            <Routes>
+                            <Switch>
                                 { isAuth && authRoutes.map(({path, Component}) =>
-                                    <Route key={path} path={path} element={Component} exact/>
+                                    <Route key={path} path={path} component={Component} exact/>
                                 )}
-                                <Route path="*" element={<Navigate to={DASHBOARD_ROUTE} />}/>
-                            </Routes>
+                                <Redirect to={DASHBOARD_ROUTE} />
+                            </Switch>
                         }
                     />
                     :
-                    <Routes>
+                    <Switch>
                         {publicRoutes.map(({path, Component}) =>
-                            <Route key={path} path={path} element={Component} exact/>
+                            <Route key={path} path={path} component={Component} exact/>
                         )}
-                        <Route path="*" element={<Navigate to={AUTH_ROUTE} />}/>
-                    </Routes>
+                        <Redirect to={AUTH_ROUTE} />
+                    </Switch>
             }
         </>
     );

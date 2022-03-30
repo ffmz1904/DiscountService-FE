@@ -1,5 +1,6 @@
 import React from 'react';
-import AppNavBar from "./AppNavBar";
+import AppNavBar from "../AppNavBar";
+import './styles.scss';
 
 const PrivatePageWrapper = ({ child }) => {
     return (

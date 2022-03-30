@@ -1,0 +1,42 @@
+#AuthPage {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .Logo {
+    position: relative;
+    top: -50px;
+  }
+
+  .formWrapper {
+    width: 500px;
+    box-shadow: rgba(0,0,0, 0.2) 0px 3px 3px -2px, rgba(0, 0, 0, 0.14) 0px 3px 4px 0px, rgba(0, 0, 0, 0.12) 0px 1px 8px 0px;
+    border-radius: 10px;
+    padding: 20px;
+
+    h2{
+      text-align: center;
+      padding: 10px 0;
+    }
+
+    .form {
+      .ui.fluid.input {
+        margin-bottom: 15px;
+      }
+      .btnWrapper {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 10px;
+      }
+      .alternativeForm {
+        text-align: center;
+
+        span {
+          text-decoration: underline;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
