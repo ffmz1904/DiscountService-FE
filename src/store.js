@@ -7,6 +7,7 @@ import {
 import thunk from 'redux-thunk';
 
 // import errorReducer from './reducers/error';
+import adminReducer from "./reducers/adminReducer";
 
 const initialState = {};
 
@@ -19,7 +20,7 @@ const composedEnhancers = compose(
 );
 
 const reducers = {
-
+    admin: adminReducer,
 };
 
 const rootReducer = combineReducers({ ...reducers });

@@ -2,11 +2,26 @@ import React, {useState} from 'react';
 import {Button, Input} from "semantic-ui-react";
 import './styles.scss';
 import Logo from "../../components/Logo";
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
+import {loginAction} from "../../actions/adminActions";
+import {useHistory} from "react-router-dom";
+import {DASHBOARD_ROUTE} from "../../routes/routesConstant";
 
-const AuthPage = () => {
+const AuthPage = ({
+    loginAction,
+}) => {
+    const history = useHistory();
     const [isLoginState, changeIsLoginState] = useState(true);
     const [email, changeEmail] = useState('');
     const [password, changePassword] = useState('');
+
+    const handleLogin = async () => {
+        const result = await loginAction({email, password});
+        if (result) {
+            history.push(DASHBOARD_ROUTE);
+        }
+    }
 
     return (
         <div id="AuthPage" className="Page">
@@ -28,7 +43,7 @@ const AuthPage = () => {
                         onChange={(e) => changePassword(e.target.value)}
                     />
                     <div className="btnWrapper">
-                        <Button>Увійти</Button>
+                        <Button onClick={() => handleLogin()}>Увійти</Button>
                     </div>
                     <hr/>
                     <div className="alternativeForm">
@@ -40,4 +55,11 @@ const AuthPage = () => {
     );
 };
 
-export default AuthPage;
+const actions = { loginAction };
+
+const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);
+
+export default connect(
+    null,
+    mapDispatchToProps,
+)(AuthPage);
