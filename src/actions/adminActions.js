@@ -2,10 +2,16 @@ import {AUTH} from "../utils/constants/action_constants";
 import * as AdminRepo from '../api/adminRepo';
 
 const setLogin = data => ({ type: AUTH.LOGIN, data });
-const setLogout = () => ({ type: AUTH.LOGIN });
+const setLogout = () => ({ type: AUTH.LOGOUT });
 
 export const authorizeAction = () => async dispatch => {
     const response = await AdminRepo.authorize();
+    if (response.error) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('undefined');
+        dispatch(setLogout());
+        return;
+    }
     dispatch(setLogin(response));
 }
 

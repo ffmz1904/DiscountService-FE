@@ -8,6 +8,8 @@ import thunk from 'redux-thunk';
 
 // import errorReducer from './reducers/error';
 import adminReducer from "./reducers/adminReducer";
+import dashboardReducer from "./reducers/dashboardReducer";
+import organizationsReducer from "./reducers/organizationsReducer";
 
 const initialState = {};
 
@@ -21,6 +23,8 @@ const composedEnhancers = compose(
 
 const reducers = {
     admin: adminReducer,
+    dashboard: dashboardReducer,
+    organizations: organizationsReducer,
 };
 
 const rootReducer = combineReducers({ ...reducers });

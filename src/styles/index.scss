@@ -10,7 +10,8 @@
     height: inherit;
 
     .Page {
-      width: inherit;
+      width: 100%;
+      //width: calc(100% - 60px);
       height: inherit;
     }
   }
