@@ -1,0 +1,110 @@
+@import "src/styles/colors";
+
+#OrganizationDetailsPage {
+  .OrganizationData {
+    background: $white;
+    box-shadow: $shadow;
+    padding: 15px;
+    border-radius: 5px;
+
+    .columns {
+      display: flex;
+      height: 150px;
+
+      .left {
+        //width: 150px;
+        .logo {
+          width: 150px;
+          height: 150px;
+          border-radius: 100%;
+
+          img {
+            border-radius: 100%;
+          }
+        }
+      }
+
+      .right {
+        padding-left: 50px;
+        display: flex;
+        flex: 1 1 auto;
+
+        .info {
+          flex: 1 1 auto;
+          .name {
+            font-size: 16px;
+            padding-bottom: 8px;
+          }
+        }
+
+        .actions {
+          position: relative;
+          width: 25px;
+          height: 25px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          i {
+            color: $grey;
+            margin: 0 0 5px 0;
+          }
+
+          &:hover {
+            border-radius: 100%;
+            background: $grey_op;
+            cursor: pointer;
+          }
+
+          .menu {
+            position: absolute;
+            width: 150px;
+            box-shadow: $shadow;
+            background: $white;
+            right: 0;
+            top: 0;
+
+            &>div {
+              padding: 5px 8px;
+
+              &:hover {
+                cursor: pointer;
+                background: $grey_op;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .description {
+      font-size: 14px;
+      .text {
+        width: 100%;
+        height: 55px;
+        text-overflow:ellipsis;
+        overflow:hidden;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        white-space: normal;
+      }
+    }
+
+    .discountInfo {
+      //width: 135px;
+      display: flex;
+      &>.separator {
+        margin: 0 15px;
+      }
+
+      &>div {
+        display: flex;
+        justify-content: space-between;
+        &>.separator {
+          margin: 0 10px;
+        }
+      }
+    }
+  }
+}

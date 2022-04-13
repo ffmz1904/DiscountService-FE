@@ -6,6 +6,8 @@ import {connect} from "react-redux";
 import {fetchDataAction} from "../../actions/organizationsActions";
 import {bindActionCreators} from "redux";
 import LoaderWidget from "../../components/LoaderWidget";
+import {useHistory} from "react-router-dom";
+import {ORGANIZATIONS_ROUTE} from "../../routes/routesConstant";
 
 const OrganizationsPage = ({
     fetchDataAction,
@@ -65,8 +67,13 @@ const OrganizationsList = ({data}) => {
 }
 
 const OrganizationsListItem = ({data}) => {
+    const history = useHistory();
+
     return(
-        <div className="OrganizationsListItem">
+        <div
+            className="OrganizationsListItem"
+            onClick={() => history.push(ORGANIZATIONS_ROUTE + `/${data._id}`)}
+        >
             <div className="logo">
                 <Image src={defaultImage} />
             </div>

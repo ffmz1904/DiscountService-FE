@@ -10,6 +10,7 @@ import thunk from 'redux-thunk';
 import adminReducer from "./reducers/adminReducer";
 import dashboardReducer from "./reducers/dashboardReducer";
 import organizationsReducer from "./reducers/organizationsReducer";
+import organizationDetailsReducer from "./reducers/organizationDetailsReducer";
 
 const initialState = {};
 
@@ -25,6 +26,7 @@ const reducers = {
     admin: adminReducer,
     dashboard: dashboardReducer,
     organizations: organizationsReducer,
+    organizationDetails: organizationDetailsReducer
 };
 
 const rootReducer = combineReducers({ ...reducers });
