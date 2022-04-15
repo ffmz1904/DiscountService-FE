@@ -39,3 +39,23 @@ export const create = async (employeeData) => {
         return data;
     }
 };
+
+export const update = async (id, updateData) => {
+    try {
+        const {data} = await $authHost.put(`api/employee/${id}`, updateData);
+        return data;
+    } catch (e) {
+        const {data} = e.response;
+        return data;
+    }
+};
+
+export const remove = async (id) => {
+    try {
+        const {data} = await $authHost.delete(`api/employee/${id}`);
+        return data;
+    } catch (e) {
+        const {data} = e.response;
+        return data;
+    }
+};

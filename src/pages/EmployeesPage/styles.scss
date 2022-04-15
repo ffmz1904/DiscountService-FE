@@ -9,6 +9,9 @@
     box-shadow: $shadow;
     border-radius: 5px;
     margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .EmployeesList {
@@ -30,6 +33,10 @@
 
       .date {
         width: 120px;
+      }
+
+      .actions {
+        width: 100px;
       }
     }
 
@@ -63,6 +70,36 @@
       .date {
         width: 120px;
       }
+
+      .actions {
+        width: 100px;
+        display: flex;
+        justify-content: space-around;
+
+        .edit {
+          color: $grey;
+          &:hover {
+            color: black;
+            cursor: pointer;
+          }
+        }
+
+        .remove {
+          color: $grey;
+          &:hover {
+            color: black;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}
+
+.CreateEmployeeModal {
+  .ui.input {
+    &:first-child {
+      margin-bottom: 15px;
     }
   }
 }
