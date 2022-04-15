@@ -27,7 +27,7 @@ const DashboardPage = ({
         <div id="DashboardPage" className="Page">
             <div className="leftColumn">
                 <MyOrganization data={orgData}/>
-                <OrganizationsList organizationsList={organizations} />
+                <OrganizationsList organizationsList={organizations} myOrgId={orgData._id} />
             </div>
             <div className="rightColumn">
                 <EmployeesList employeesList={employees} />
@@ -71,7 +71,7 @@ const MyOrganization = ({data}) => {
     );
 }
 
-const OrganizationsList = ({ organizationsList }) => {
+const OrganizationsList = ({ organizationsList, myOrgId }) => {
     return (
         <div className="OrganizationsList">
             <h5>Організації</h5>
@@ -79,24 +79,32 @@ const OrganizationsList = ({ organizationsList }) => {
                 <div className="header">
                     <div className="logo"/>
                     <div className="name">Назва</div>
-                    <div className="discount">Знижка</div>
+                    <div className="discount">Знижка (для вас / надана)</div>
                 </div>
                 {
-                    organizationsList.map((el) => <OrganizationsListItem key={el._id} data={el} />)
+                    organizationsList.map((el) => <OrganizationsListItem
+                        key={el._id}
+                        data={el}
+                        discountForYou={el.discounts.filter(discount => discount.id === myOrgId)[0]}
+                    />)
                 }
             </div>
         </div>
     );
 }
 
-const OrganizationsListItem = ({data}) => {
+const OrganizationsListItem = ({data, discountForYou}) => {
     return (
         <div className="OrganizationsListItem">
             <div className="logo">
                 <Image src={defaultImg} />
             </div>
             <div className="name">{data.name}</div>
-            <div className="discount">Знижка</div>
+            <div className="discount">
+                <span>{discountForYou ? discountForYou.percent + '%' : '-'} </span>
+                /
+                <span> {data.discountForOrg ? data.discountForOrg + '%' : '-'}</span>
+            </div>
         </div>
     );
 }

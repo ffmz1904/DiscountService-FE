@@ -12,6 +12,7 @@ import {ORGANIZATIONS_ROUTE} from "../../routes/routesConstant";
 const OrganizationsPage = ({
     fetchDataAction,
     organizations,
+    myOrgId,
 }) => {
     const [isLoading, setIsLoading] = useState(true);
 
@@ -26,15 +27,16 @@ const OrganizationsPage = ({
     return (
         <div id="OrganizationsPage" className="Page">
             <SearchBar />
-            <OrganizationsList data={organizations} />
+            <OrganizationsList data={organizations} myOrgId={myOrgId} />
         </div>
     );
 };
 
 const actions = {fetchDataAction};
 const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);
-const mapStateToProps = ({organizations}) => ({
-    organizations: organizations.organizations
+const mapStateToProps = ({organizations, admin}) => ({
+    organizations: organizations.organizations,
+    myOrgId: admin.data.organizationId
 });
 
 export default connect(
@@ -50,23 +52,27 @@ const SearchBar = () => {
     );
 }
 
-const OrganizationsList = ({data}) => {
+const OrganizationsList = ({data, myOrgId}) => {
     return(
         <div className="OrganizationsList">
             <div className="header">
                 <div className="logo"/>
                 <div className="name">Назва</div>
                 <div className="description">Опис</div>
-                <div className="discount">Знижка</div>
+                <div className="discount">Знижка (для вас / надана)</div>
             </div>
             {
-                data.map(el => <OrganizationsListItem key={el._id} data={el} />)
+                data.map(el => <OrganizationsListItem
+                    key={el._id}
+                    data={el}
+                    discountForYou={el.discounts.filter(discount => discount.id === myOrgId)[0]}
+                />)
             }
         </div>
     );
 }
 
-const OrganizationsListItem = ({data}) => {
+const OrganizationsListItem = ({data, discountForYou}) => {
     const history = useHistory();
 
     return(
@@ -79,7 +85,11 @@ const OrganizationsListItem = ({data}) => {
             </div>
             <div className="name">{data.name}</div>
             <div className="description">{data.description}</div>
-            <div className="discount">5%</div>
+            <div className="discount">
+                <span>{ discountForYou ? discountForYou.percent + '%' : '-'} </span>
+                /
+                <span> {data.discountForOrg ? data.discountForOrg + '%' : '-'}</span>
+            </div>
         </div>
     );
 }
