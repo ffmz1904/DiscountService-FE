@@ -12,6 +12,20 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    .searchWrapper {
+      .ui.input {
+        width: 450px;
+
+        input {
+          color: $grey;
+          &:focus {
+            color: green;
+            border-color: green;
+          }
+        }
+      }
+    }
   }
 
   .EmployeesList {
@@ -97,6 +111,16 @@
         cursor: pointer;
         background: $grey_op;
       }
+    }
+
+    .empty {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: grey;
     }
   }
 }

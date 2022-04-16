@@ -236,8 +236,8 @@ const EmployeesTable = ({data, searchString, onFilterChanged}) => {
         ? data
         : data.filter(el => {
            const parts = el.fullName.split(' ');
-           const exist = parts.filter(el => el.toLowerCase().includes(searchString.toLocaleString()));
-           return exist.length !== 0;
+           const exist = parts.filter(part => part.toLowerCase().includes(searchString.toLowerCase()));
+           return exist.length !== 0 || el.fullName.toLowerCase().includes(searchString.toLowerCase());
         });
     return(
         <div className="EmployeesTable">
@@ -249,7 +249,7 @@ const EmployeesTable = ({data, searchString, onFilterChanged}) => {
                 <div className="searchWrapper">
                     <Input
                         placeholder="Пошук..."
-                        value={data.searchString}
+                        value={searchString}
                         onChange={(e) => onFilterChanged(e.target.value)}
                     />
                 </div>

@@ -7,6 +7,7 @@ import {bindActionCreators} from "redux";
 import {
     createEmployeeAction,
     fetchDataAction,
+    filterEmployeeAction,
     removeEmployeeAction,
     updateEmployeeAction
 } from "../../actions/employeesActions";
@@ -18,6 +19,7 @@ const EmployeesPage = ({
     createEmployeeAction,
     updateEmployeeAction,
     removeEmployeeAction,
+    filterEmployeeAction,
     myOrgId,
     data,
 }) => {
@@ -130,9 +132,14 @@ const EmployeesPage = ({
     return (
         <div id="EmployeesPage" className="Page">
             {modalBuilder()}
-            <SearchBar onAddTap={() => setCrateModal(true)} />
+            <SearchBar
+                onAddTap={() => setCrateModal(true)}
+                searchString={data.searchString}
+                onFilterChanged={filterEmployeeAction}
+            />
             <EmployeesList
                 data={data.employees}
+                searchString={data.searchString}
                 onEditTap={updateEmployeeHandler}
                 onRemoveTap={setRemoveUserId}
             />
@@ -140,7 +147,13 @@ const EmployeesPage = ({
     );
 };
 
-const actions = {fetchDataAction, createEmployeeAction, updateEmployeeAction, removeEmployeeAction};
+const actions = {
+    fetchDataAction,
+    createEmployeeAction,
+    updateEmployeeAction,
+    removeEmployeeAction,
+    filterEmployeeAction,
+};
 const mapDispatchToProps = (dispatch) => bindActionCreators(actions, dispatch);
 const mapStateToProps = ({admin, employees}) => ({
     myOrgId: admin.data.organizationId,
@@ -152,10 +165,16 @@ export default connect(
     mapDispatchToProps,
 )(EmployeesPage);
 
-const SearchBar = ({onAddTap}) => {
+const SearchBar = ({onAddTap, searchString, onFilterChanged}) => {
     return(
         <div className="SearchBar">
-           <span>Search Bar</span>
+            <div className="searchWrapper">
+                <Input
+                    placeholder="Пошук..."
+                    value={searchString}
+                    onChange={(e) => onFilterChanged(e.target.value)}
+                />
+            </div>
             <Button
                 onClick={onAddTap}
             >Додати</Button>
@@ -163,7 +182,14 @@ const SearchBar = ({onAddTap}) => {
     );
 }
 
-const EmployeesList = ({data, onEditTap, onRemoveTap}) => {
+const EmployeesList = ({data, searchString, onEditTap, onRemoveTap}) => {
+    const employees = searchString === ''
+        ? data
+        : data.filter(el => {
+            const parts = el.fullName.split(' ');
+            const exist = parts.filter(part => part.toLowerCase().includes(searchString.toLowerCase()));
+            return exist.length !== 0 || el.fullName.toLowerCase().includes(searchString.toLowerCase());
+        });
     return(
         <div className="EmployeesList">
             <div className="header">
@@ -172,13 +198,14 @@ const EmployeesList = ({data, onEditTap, onRemoveTap}) => {
                 <div className="date">Дата</div>
                 <div className="actions"/>
             </div>
-            {
-                data.map(el => <EmployeesListItem
+            { employees.length
+                ? employees.map(el => <EmployeesListItem
                     key={el._id}
                     data={el}
                     onEditTap={() => onEditTap(el)}
                     onRemoveTap={() => onRemoveTap(el._id)}
                 />)
+                : <div className="empty">Працівників не знайдено</div>
             }
         </div>
     );

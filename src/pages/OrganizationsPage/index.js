@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import './styles.scss';
-import {Image} from "semantic-ui-react";
+import {Image, Input} from "semantic-ui-react";
 import defaultImage from "../../assets/img/default-img.svg";
 import {connect} from "react-redux";
-import {fetchDataAction} from "../../actions/organizationsActions";
+import {fetchDataAction, filterOrganizationAction} from "../../actions/organizationsActions";
 import {bindActionCreators} from "redux";
 import LoaderWidget from "../../components/LoaderWidget";
 import {useHistory} from "react-router-dom";
@@ -11,7 +11,8 @@ import {ORGANIZATIONS_ROUTE} from "../../routes/routesConstant";
 
 const OrganizationsPage = ({
     fetchDataAction,
-    organizations,
+    filterOrganizationAction,
+    data,
     myOrgId,
 }) => {
     const [isLoading, setIsLoading] = useState(true);
@@ -26,16 +27,23 @@ const OrganizationsPage = ({
 
     return (
         <div id="OrganizationsPage" className="Page">
-            <SearchBar />
-            <OrganizationsList data={organizations} myOrgId={myOrgId} />
+            <SearchBar
+                searchString={data.searchString}
+                onFilterChanged={filterOrganizationAction}
+            />
+            <OrganizationsList
+                data={data.organizations}
+                searchString={data.searchString}
+                myOrgId={myOrgId}
+            />
         </div>
     );
 };
 
-const actions = {fetchDataAction};
+const actions = {fetchDataAction, filterOrganizationAction};
 const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);
 const mapStateToProps = ({organizations, admin}) => ({
-    organizations: organizations.organizations,
+    data: organizations,
     myOrgId: admin.data.organizationId
 });
 
@@ -44,15 +52,29 @@ export default connect(
     mapDispatchToProps
 )(OrganizationsPage);
 
-const SearchBar = () => {
+const SearchBar = ({searchString, onFilterChanged}) => {
     return(
         <div className="SearchBar">
-            Search Bar
+            <div className="searchWrapper">
+                <Input
+                    placeholder="Пошук..."
+                    value={searchString}
+                    onChange={(e) => onFilterChanged(e.target.value)}
+                />
+            </div>
         </div>
     );
 }
 
-const OrganizationsList = ({data, myOrgId}) => {
+const OrganizationsList = ({data, myOrgId, searchString}) => {
+    const organizations = searchString === ''
+        ? data
+        : data.filter(el => {
+            const parts = el.name.split(' ');
+            const exist = parts.filter(part => part.toLowerCase().includes(searchString.toLowerCase()));
+            return exist.length !== 0 || el.name.toLowerCase().includes(searchString.toLowerCase());
+        });
+
     return(
         <div className="OrganizationsList">
             <div className="header">
@@ -61,12 +83,13 @@ const OrganizationsList = ({data, myOrgId}) => {
                 <div className="description">Опис</div>
                 <div className="discount">Знижка (для вас / надана)</div>
             </div>
-            {
-                data.map(el => <OrganizationsListItem
+            { organizations.length
+                ? organizations.map(el => <OrganizationsListItem
                     key={el._id}
                     data={el}
                     discountForYou={el.discounts.filter(discount => discount.id === myOrgId)[0]}
                 />)
+                : <div className="empty">Організацій не знайдено</div>
             }
         </div>
     );
