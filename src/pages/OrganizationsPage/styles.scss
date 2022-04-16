@@ -72,6 +72,11 @@
       .discount {
         width: 120px;
       }
+
+      &:hover {
+        cursor: pointer;
+        background: $grey_op;
+      }
     }
   }
 }

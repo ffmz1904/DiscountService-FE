@@ -6,6 +6,8 @@ import {connect} from "react-redux";
 import {fetchDataAction} from "../../actions/dashboardActions";
 import {bindActionCreators} from "redux";
 import LoaderWidget from "../../components/LoaderWidget";
+import {useHistory} from "react-router-dom";
+import {ORGANIZATIONS_ROUTE} from "../../routes/routesConstant";
 
 const DashboardPage = ({
     fetchDataAction,
@@ -26,7 +28,7 @@ const DashboardPage = ({
     return (
         <div id="DashboardPage" className="Page">
             <div className="leftColumn">
-                <MyOrganization data={orgData}/>
+                <MyOrganization data={orgData} employeesCount={orgData.employeesCount}/>
                 <OrganizationsList organizationsList={organizations} myOrgId={orgData._id} />
             </div>
             <div className="rightColumn">
@@ -49,7 +51,7 @@ export default connect(
     mapDispatchToProps
 )(DashboardPage);
 
-const MyOrganization = ({data}) => {
+const MyOrganization = ({data, employeesCount}) => {
     return(
       <div className="MyOrgContainer">
           <div className="columns">
@@ -60,7 +62,7 @@ const MyOrganization = ({data}) => {
               </div>
               <div className="right">
                   <div className="name">{data.name}</div>
-                  <div className="empCount">Працівників: 12</div>
+                  <div className="empCount">Працівників: {employeesCount}</div>
               </div>
           </div>
           <div className="description">
@@ -94,8 +96,12 @@ const OrganizationsList = ({ organizationsList, myOrgId }) => {
 }
 
 const OrganizationsListItem = ({data, discountForYou}) => {
+    const history = useHistory();
+    const redirectToOrgPage = () => {
+        history.push(ORGANIZATIONS_ROUTE + `/${data._id}`);
+    }
     return (
-        <div className="OrganizationsListItem">
+        <div className="OrganizationsListItem" onClick={() => redirectToOrgPage()}>
             <div className="logo">
                 <Image src={defaultImg} />
             </div>

@@ -124,6 +124,11 @@
           width: 120px;
           text-align: center;
         }
+
+        &:hover {
+          cursor: pointer;
+          background: $grey_op;
+        }
       }
     }
 
@@ -191,6 +196,11 @@
           .date {
             width: 120px;
             text-align: center;
+          }
+
+          &:hover {
+            cursor: pointer;
+            background: $grey_op;
           }
         }
       }

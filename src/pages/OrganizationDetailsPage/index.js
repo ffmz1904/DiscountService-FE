@@ -129,7 +129,7 @@ const OrganizationData = ({
                 <div className="right">
                     <div className="info">
                         <div className="name">{data.orgData.name}</div>
-                        <div className="empCount">Працівників: 12</div>
+                        <div className="empCount">Працівників: {data.orgData.employeesCount}</div>
                     </div>
                     <div className="actions">
                         <Icon name='ellipsis vertical' onClick={() => setShowMenu(true)} />
