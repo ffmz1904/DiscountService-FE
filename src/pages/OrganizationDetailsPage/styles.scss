@@ -135,11 +135,12 @@
           position: relative;
           top: 5px;
           left: 5px;
-          color: green;
+          color: $green;
         }
         span {
           margin-left: 15px;
           font-size: 15px;
+          color: $green;
         }
       }
 
@@ -150,8 +151,8 @@
           input {
             color: $grey;
             &:focus {
-              color: green;
-              border-color: green;
+              color: $green;
+              border-color: $green;
             }
           }
         }

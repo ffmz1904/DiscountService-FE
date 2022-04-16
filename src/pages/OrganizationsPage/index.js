@@ -81,7 +81,7 @@ const OrganizationsList = ({data, myOrgId, searchString}) => {
                 <div className="logo"/>
                 <div className="name">Назва</div>
                 <div className="description">Опис</div>
-                <div className="discount">Знижка (для вас / надана)</div>
+                <div className="discount">Знижка <br/> (для вас / надана)</div>
             </div>
             { organizations.length
                 ? organizations.map(el => <OrganizationsListItem

@@ -13,6 +13,7 @@ import {
 } from "../../actions/employeesActions";
 import LoaderWidget from "../../components/LoaderWidget";
 import ModalWindow from "../../components/ModalWindow";
+import DefaultAvatar from "../../components/DefaultAvatar";
 
 const EmployeesPage = ({
     fetchDataAction,
@@ -215,7 +216,8 @@ const EmployeesListItem = ({data, onEditTap, onRemoveTap}) => {
     return(
         <div className="EmployeesListItem">
             <div className="logo">
-                <Image src={defaultImage} />
+                {/*<Image src={defaultImage} />*/}
+                <DefaultAvatar name={data.fullName} />
             </div>
             <div className="name">{data.fullName}</div>
             <div className="date">{data.birthday}</div>

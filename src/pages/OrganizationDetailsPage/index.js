@@ -14,6 +14,7 @@ import {Icon, Image, Input} from "semantic-ui-react";
 import defaultImg from "../../assets/img/default-img.svg";
 import ModalWindow from "../../components/ModalWindow";
 import defaultImage from "../../assets/img/default-img.svg";
+import DefaultAvatar from "../../components/DefaultAvatar";
 
 const OrganizationDetailsPage = ({
     fetchDataAction,
@@ -268,7 +269,8 @@ const EmployeesTableItem = ({data}) => {
     return(
         <div className="EmployeesTableItem">
             <div className="logo">
-                <Image src={defaultImage} />
+                {/*<Image src={defaultImage} />*/}
+                <DefaultAvatar name={data.fullName} width={90}/>
             </div>
             <div className="name">{data.fullName}</div>
             <div className="date">{data.birthday}</div>

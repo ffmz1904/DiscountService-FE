@@ -16,8 +16,8 @@
         input {
           color: $grey;
           &:focus {
-            color: green;
-            border-color: green;
+            color: $green;
+            border-color: $green;
           }
         }
       }
@@ -31,9 +31,11 @@
     .header {
       display: flex;
       padding: 8px 10px;
+      background: $grey_2;
+      align-items: center;
 
       .logo {
-        width: 90px;
+        width: 50px;
       }
 
       .name {
@@ -47,7 +49,8 @@
       }
 
       .discount {
-        width: 120px;
+        width: 150px;
+        text-align: center;
       }
     }
 
@@ -62,13 +65,13 @@
       }
 
       .logo {
-        width: 90px;
-        height: 90px;
+        width: 50px;
+        height: 50px;
         border-radius: 100%;
 
         img {
-          width: 90px;
-          height: 90px;
+          width: 50px;
+          height: 50px;
           border-radius: 100%;
         }
       }
@@ -84,12 +87,13 @@
       }
 
       .discount {
-        width: 120px;
+        width: 150px;
+        text-align: center;
       }
 
       &:hover {
         cursor: pointer;
-        background: $grey_op;
+        background: $grey_2op;
       }
     }
 

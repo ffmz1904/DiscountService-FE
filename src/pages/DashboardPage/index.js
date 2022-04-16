@@ -8,6 +8,7 @@ import {bindActionCreators} from "redux";
 import LoaderWidget from "../../components/LoaderWidget";
 import {useHistory} from "react-router-dom";
 import {ORGANIZATIONS_ROUTE} from "../../routes/routesConstant";
+import DefaultAvatar from "../../components/DefaultAvatar";
 
 const DashboardPage = ({
     fetchDataAction,
@@ -137,7 +138,8 @@ const EmployeesListItem = ({data}) => {
     return(
         <div className="EmployeesListItem">
             <div className="logo">
-                <Image src={defaultImg} />
+                {/*<Image src={defaultImg} />*/}
+                <DefaultAvatar name={data.fullName} />
             </div>
             <div className="name">{data.fullName}</div>
             <div className="date">{data.birthday}</div>
