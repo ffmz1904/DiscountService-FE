@@ -1,14 +1,31 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import './styles.scss';
 import {Button, Image} from "semantic-ui-react";
 import defaultImg from "../../assets/img/default-img.svg";
 import {logoutAction} from "../../actions/adminActions";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
+import {fetchDataAction} from "../../actions/profileActions";
+import LoaderWidget from "../../components/LoaderWidget";
 
-const ProfilePage = ({ logoutAction }) => {
+const ProfilePage = ({
+    fetchDataAction,
+    logoutAction,
+    data,
+}) => {
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        fetchDataAction()
+            .then(() => setIsLoading(false));
+    }, [fetchDataAction]);
+
     const logoutHandler = () => {
         logoutAction();
+    }
+
+    if (isLoading) {
+        return <LoaderWidget />
     }
 
     return (
@@ -16,16 +33,19 @@ const ProfilePage = ({ logoutAction }) => {
             <TopBar
                 onLogoutTap={logoutHandler}
             />
-            <MyOrganization data={{name: 'OrgAnization', description: "TYTYTY...."}}/>
+            <MyOrganization data={data.orgData}/>
         </div>
     );
 };
 
-const actions = {logoutAction};
+const actions = {logoutAction, fetchDataAction};
 const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);
+const mapStateToProps = ({profile}) => ({
+    data: profile,
+});
 
 export default connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps,
 )(ProfilePage);
 
@@ -48,7 +68,7 @@ const MyOrganization = ({data}) => {
                 </div>
                 <div className="right">
                     <div className="name">{data.name}</div>
-                    <div className="empCount">Працівників: 12</div>
+                    <div className="empCount">Працівників: {data.employeesCount}</div>
                 </div>
             </div>
             <div className="description">

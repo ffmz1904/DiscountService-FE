@@ -12,6 +12,7 @@ import dashboardReducer from "./reducers/dashboardReducer";
 import organizationsReducer from "./reducers/organizationsReducer";
 import organizationDetailsReducer from "./reducers/organizationDetailsReducer";
 import employeesReducer from "./reducers/employeesReducer";
+import profileReducer from "./reducers/profileReducer";
 
 const initialState = {};
 
@@ -28,7 +29,8 @@ const reducers = {
     dashboard: dashboardReducer,
     organizations: organizationsReducer,
     organizationDetails: organizationDetailsReducer,
-    employees: employeesReducer
+    employees: employeesReducer,
+    profile: profileReducer,
 };
 
 const rootReducer = combineReducers({ ...reducers });

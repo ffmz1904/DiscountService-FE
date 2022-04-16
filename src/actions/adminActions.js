@@ -30,3 +30,13 @@ export const logoutAction = () => async dispatch => {
     dispatch(setLogout());
 }
 
+export const registrationAction = (registrationData) => async dispatch => {
+    const response = await AdminRepo.registration(registrationData);
+
+    localStorage.setItem('token', response.tokens.accessToken);
+    localStorage.setItem('undefined', response.tokens.refreshToken);
+    dispatch(setLogin(response.admin));
+    return true;
+}
+
+
