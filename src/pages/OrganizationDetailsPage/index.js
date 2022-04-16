@@ -3,16 +3,23 @@ import './styles.scss';
 import {useParams} from "react-router-dom";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
-import {fetchDataAction, removeDiscountAction, setDiscountAction} from "../../actions/organizationDetailsActions";
+import {
+    fetchDataAction,
+    filterEmployeeAction,
+    removeDiscountAction,
+    setDiscountAction
+} from "../../actions/organizationDetailsActions";
 import LoaderWidget from "../../components/LoaderWidget";
 import {Icon, Image, Input} from "semantic-ui-react";
 import defaultImg from "../../assets/img/default-img.svg";
 import ModalWindow from "../../components/ModalWindow";
+import defaultImage from "../../assets/img/default-img.svg";
 
 const OrganizationDetailsPage = ({
     fetchDataAction,
     setDiscountAction,
     removeDiscountAction,
+    filterEmployeeAction,
     data = null,
 }) => {
     const params = useParams();
@@ -22,7 +29,6 @@ const OrganizationDetailsPage = ({
     const [discountModal, setDiscountModal] = useState(false);
     const [discountValue, setDiscountValue] = useState('');
     const [deleteDiscountModal, setDeleteDiscountModal] = useState(false);
-
 
     const clearActionHandler = () => {
         if (showDiscountMenu) {
@@ -73,7 +79,7 @@ const OrganizationDetailsPage = ({
         </>);
     }
 
-    if (isLoading || data.isEmpty) {
+    if (isLoading) {
         return <LoaderWidget />
     }
 
@@ -92,11 +98,23 @@ const OrganizationDetailsPage = ({
                 onSetDiscountTap={() => setDiscountModal(true)}
                 onRemoveDiscountTap={() => setDeleteDiscountModal(true)}
             />
+            { data.employees.length &&
+                <EmployeesTable
+                    data={data.employees}
+                    searchString={data.searchString}
+                    onFilterChanged={filterEmployeeAction}
+                />
+            }
         </div>
     );
 };
 
-const actions = {fetchDataAction, setDiscountAction, removeDiscountAction};
+const actions = {
+    fetchDataAction,
+    setDiscountAction,
+    removeDiscountAction,
+    filterEmployeeAction,
+};
 const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);
 const mapStateToProps = ({organizationDetails, admin}) => ({
     data: organizationDetails,
@@ -209,6 +227,51 @@ const SetDiscountModal = ({ discount, setDiscount }) => {
                 onChange={(e) => setDiscount(e.target.value)}
                 error={discount !== '' && (discount < 1 || discount > 99)}
             />
+        </div>
+    );
+}
+
+const EmployeesTable = ({data, searchString, onFilterChanged}) => {
+    const employees = searchString === ''
+        ? data
+        : data.filter(el => {
+           const parts = el.fullName.split(' ');
+           const exist = parts.filter(el => el.toLowerCase().includes(searchString.toLocaleString()));
+           return exist.length !== 0;
+        });
+    return(
+        <div className="EmployeesTable">
+            <div className="header">
+                <div className="title">
+                    <Icon name="users"/>
+                    <span>Працівники</span>
+                </div>
+                <div className="searchWrapper">
+                    <Input
+                        placeholder="Пошук..."
+                        value={data.searchString}
+                        onChange={(e) => onFilterChanged(e.target.value)}
+                    />
+                </div>
+            </div>
+            <div className="elWrapper">
+                { employees.length
+                    ? employees.map(el => <EmployeesTableItem key={el._id} data={el} />)
+                    : <div className="empty">Працівників не знайдено</div>
+                }
+            </div>
+        </div>
+    );
+}
+
+const EmployeesTableItem = ({data}) => {
+    return(
+        <div className="EmployeesTableItem">
+            <div className="logo">
+                <Image src={defaultImage} />
+            </div>
+            <div className="name">{data.fullName}</div>
+            <div className="date">{data.birthday}</div>
         </div>
     );
 }
