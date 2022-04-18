@@ -19,8 +19,52 @@ const AuthPage = ({
     const [confirmPassword, changeConfirmPassword] = useState('');
     const [orgName, changeOrgName] = useState('');
     const [orgDescription, changeOrgDescription] = useState('');
+    const [errors, setErrors] = useState([]);
+
+    const clearError = name => {
+        const errorsArr = errors.filter(el => el !== name);
+        setErrors(errorsArr);
+    }
+
+    const validateRegisterData = () => {
+        const errorsArr = [];
+        if (orgName.length < 3) {
+            errorsArr.push('orgName');
+        }
+        // if (orgDescription === '') {
+        //     errorsArr.push('orgDescription');
+        // }
+        if (email === '') {
+            errorsArr.push('email');
+        }
+        const comparePass = password === confirmPassword;
+        if (password.length < 4  || !comparePass) {
+            errorsArr.push('password');
+        }
+        if (!comparePass) {
+            errorsArr.push('confirmPassword');
+        }
+        return errorsArr;
+    }
+
+    const validateLoginData = () => {
+        const errorsArr = [];
+        if (email === '') {
+            errorsArr.push('email');
+        }
+        if (password.length < 4) {
+            errorsArr.push('password');
+        }
+        return errorsArr;
+    }
+
 
     const handleLogin = async () => {
+        const errors = validateLoginData();
+        if (errors.length) {
+            setErrors(errors);
+            return false;
+        }
         const result = await loginAction({email, password});
         if (result) {
             history.push(DASHBOARD_ROUTE);
@@ -28,6 +72,12 @@ const AuthPage = ({
     }
 
     const handleRegistration = async () => {
+        const errors = validateRegisterData();
+        if (errors.length) {
+            setErrors(errors);
+            return false;
+        }
+
         const registerData = {
             user: {
                 email,
@@ -57,6 +107,8 @@ const AuthPage = ({
                             password={password}
                             changePassword={changePassword}
                             handleLogin={handleLogin}
+                            errors={errors}
+                            skipError={clearError}
                         />
                         : <RegistrationForm
                             email={email}
@@ -70,6 +122,8 @@ const AuthPage = ({
                             orgDescription={orgDescription}
                             changeOrgDescription={changeOrgDescription}
                             handleRegistration={handleRegistration}
+                            errors={errors}
+                            skipError={clearError}
                         />
                     }
                     <hr/>
@@ -100,6 +154,8 @@ const LoginForm = ({
     password,
     changePassword,
     handleLogin,
+    errors,
+    skipError,
 }) => {
     return(
         <div className="LoginForm">
@@ -108,14 +164,21 @@ const LoginForm = ({
                     fluid
                     placeholder='Ел. пошта'
                     value={email}
-                    onChange={(e) => changeEmail(e.target.value)}
-                    // error
+                    onChange={(e) => {
+                        skipError('email');
+                        changeEmail(e.target.value);
+                    }}
+                    error={errors.includes('email')}
                 />
                 <Input
                     fluid
                     placeholder='Пароль'
                     value={password}
-                    onChange={(e) => changePassword(e.target.value)}
+                    onChange={(e) => {
+                        skipError('password');
+                        changePassword(e.target.value);
+                    }}
+                    error={errors.includes('password')}
                 />
                 <div className="btnWrapper">
                     <Button onClick={() => handleLogin()}>Увійти</Button>
@@ -137,6 +200,8 @@ const RegistrationForm = ({
     orgDescription,
     changeOrgDescription,
     handleRegistration,
+    errors,
+    skipError,
 })  => {
     return(
         <div className="RegistrationForm">
@@ -145,31 +210,51 @@ const RegistrationForm = ({
                     fluid
                     placeholder='Назва організації'
                     value={orgName}
-                    onChange={(e) => changeOrgName(e.target.value)}
+                    onChange={(e) => {
+                        skipError('orgName');
+                        changeOrgName(e.target.value);
+                    }}
+                    error={errors.includes('orgName')}
                 />
                 <TextArea
                     placeholder='Опис (Чим займається ваша організація? Які послуги надає?)'
                     value={orgDescription}
-                    onChange={(e) => changeOrgDescription(e.target.value)}
+                    onChange={(e) => {
+                        skipError('orgDescription');
+                        changeOrgDescription(e.target.value);
+                    }}
+                    error={errors.includes('orgDescription')}
                 />
                 <Input
                     fluid
                     placeholder='Ел. пошта'
                     value={email}
-                    onChange={(e) => changeEmail(e.target.value)}
-                    // error
+                    onChange={(e) => {
+                        skipError('email');
+                        changeEmail(e.target.value);
+                    }}
+                    error={errors.includes('email')}
                 />
                 <Input
                     fluid
                     placeholder='Пароль'
                     value={password}
-                    onChange={(e) => changePassword(e.target.value)}
+                    onChange={(e) => {
+                        skipError('password');
+                        changePassword(e.target.value);
+                    }}
+                    error={errors.includes('password')}
                 />
                 <Input
                     fluid
                     placeholder='Підтвердіть пароль'
                     value={confirmPassword}
-                    onChange={(e) => changeConfirmPassword(e.target.value)}
+                    onChange={(e) => {
+                        skipError('confirmPassword');
+                        skipError('password');
+                        changeConfirmPassword(e.target.value);
+                    }}
+                    error={errors.includes('confirmPassword')}
                 />
                 <div className="btnWrapper">
                     <Button onClick={() => handleRegistration()}>Реєстрація</Button>
