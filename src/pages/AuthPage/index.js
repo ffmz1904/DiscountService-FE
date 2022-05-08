@@ -26,6 +26,16 @@ const AuthPage = ({
         setErrors(errorsArr);
     }
 
+    const changeAuthForms = () => {
+        changeIsLoginState(!isLoginState);
+        changeEmail('');
+        changePassword('');
+        changeConfirmPassword('');
+        changeOrgName('');
+        changeOrgDescription('');
+        setErrors([]);
+    }
+
     const validateRegisterData = () => {
         const errorsArr = [];
         if (orgName.length < 3) {
@@ -57,7 +67,6 @@ const AuthPage = ({
         }
         return errorsArr;
     }
-
 
     const handleLogin = async () => {
         const errors = validateLoginData();
@@ -129,7 +138,7 @@ const AuthPage = ({
                     <hr/>
                     <div className="alternativeForm">
                         { isLoginState ? 'Хочете приєднатись? ' : 'Вже маєте акаунт? ' }
-                        <span onClick={() => changeIsLoginState(!isLoginState)}>
+                        <span onClick={() => changeAuthForms()}>
                             {isLoginState ? 'Створіть акаунт' : 'Повернутись до входу'}
                         </span>
                     </div>
