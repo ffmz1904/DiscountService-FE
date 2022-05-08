@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './styles.scss';
 import {Button, Icon, Image, Input} from "semantic-ui-react";
-import defaultImage from '../../assets/img/default-img.svg';
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import {
@@ -14,6 +13,7 @@ import {
 import LoaderWidget from "../../components/LoaderWidget";
 import ModalWindow from "../../components/ModalWindow";
 import DefaultAvatar from "../../components/DefaultAvatar";
+import {prepareImgUpload} from "../../utils/imgUtils";
 
 const EmployeesPage = ({
     fetchDataAction,
@@ -30,11 +30,22 @@ const EmployeesPage = ({
     const [removeUserId, setRemoveUserId] = useState(null);
     const [name, setName] = useState('');
     const [birthday, setBirthday] = useState('');
+    const [file, setFile] = useState(undefined);
+    const [photo, setPhoto] = useState(undefined);
 
     useEffect(() => {
         fetchDataAction(myOrgId)
             .then(() => setIsLoading(false));
     }, [fetchDataAction, myOrgId]);
+
+    const prepareData = (params) => {
+        let formData = new FormData();
+
+        for (let param in params) {
+            formData.append(param, params[param]);
+        }
+        return formData;
+    }
 
     const createEmployeeHandler = () => {
         const employee = {
@@ -42,14 +53,23 @@ const EmployeesPage = ({
             organizationId: myOrgId,
             birthday: birthday
         }
-        createEmployeeAction(employee)
-            .then(() => setCrateModal(false));
+
+        if (file) {
+            employee.img = file;
+        }
+        const employeeData = prepareData(employee);
+        createEmployeeAction(employeeData)
+            .then(() => {
+                clearCreatingFields();
+                setCrateModal(false);
+            });
     }
 
     const updateEmployeeHandler = (employee = null) => {
         if (employee !== null) {
             setName(employee.fullName);
             setBirthday(employee.birthday)
+            setPhoto(employee.photo);
             setEditUserId(employee._id);
             return true;
         }
@@ -58,7 +78,13 @@ const EmployeesPage = ({
             fullName: name,
             birthday,
         }
-        updateEmployeeAction(editUserId, updateData)
+
+        if (file) {
+            updateData.img = file;
+        }
+        const employeeData = prepareData(updateData);
+
+        updateEmployeeAction(editUserId, employeeData)
             .then(() => {
                 clearCreatingFields();
                 setEditUserId(null);
@@ -73,6 +99,8 @@ const EmployeesPage = ({
     const clearCreatingFields = () => {
         setName('');
         setBirthday('');
+        setFile(undefined);
+        setPhoto(undefined);
     }
 
     const modalBuilder = () => {
@@ -92,6 +120,10 @@ const EmployeesPage = ({
                     setName={setName}
                     birthday={birthday}
                     setBirthday={setBirthday}
+                    img={photo}
+                    setImg={setPhoto}
+                    file={file}
+                    setFile={setFile}
                 />}
                 onSuccess={() => createEmployeeHandler()}
                 onReject={() => clearCreatingFields()}
@@ -111,6 +143,10 @@ const EmployeesPage = ({
                     setName={setName}
                     birthday={birthday}
                     setBirthday={setBirthday}
+                    img={photo}
+                    setImg={setPhoto}
+                    file={file}
+                    setFile={setFile}
                 />}
                 onSuccess={() => updateEmployeeHandler()}
                 onReject={() => clearCreatingFields()}
@@ -216,8 +252,10 @@ const EmployeesListItem = ({data, onEditTap, onRemoveTap}) => {
     return(
         <div className="EmployeesListItem">
             <div className="logo">
-                {/*<Image src={defaultImage} />*/}
-                <DefaultAvatar name={data.fullName} />
+                {data.photo
+                    ? <Image src={process.env.REACT_APP_API_URL  + data.photo} />
+                    : <DefaultAvatar name={data.fullName} />
+                }
             </div>
             <div className="name">{data.fullName}</div>
             <div className="date">{data.birthday}</div>
@@ -237,10 +275,32 @@ const CreateEmployeeModal = ({
     name,
     setName,
     birthday,
-    setBirthday
+    setBirthday,
+    file,
+    setFile,
+    img,
+    setImg,
 }) => {
+    const handleUploadFile = e => {
+        return prepareImgUpload(e, setImg, setFile);
+    };
+
     return(
         <div className="CreateEmployeeModal">
+            <div className="logo">
+                { !file && !img && <DefaultAvatar name={name} width={150} />}
+                { file && img && <Image src={img} />  }
+                { !file && img && <Image src={process.env.REACT_APP_API_URL + img} />  }
+            </div>
+            <div className="changeLogo">
+                <label htmlFor="upload-photo">
+                    <Icon name="photo" />
+                    Додати фото (опціонально)
+                </label>
+                <input type="file" name="photo" id="upload-photo"
+                       onChange={e => handleUploadFile(e)}
+                />
+            </div>
             <Input
                 label={'П.І.Б.'}
                 fluid

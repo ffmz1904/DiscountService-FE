@@ -270,8 +270,10 @@ const EmployeesTableItem = ({data}) => {
     return(
         <div className="EmployeesTableItem">
             <div className="logo">
-                {/*<Image src={defaultImage} />*/}
-                <DefaultAvatar name={data.fullName} width={90}/>
+                { data.photo
+                    ? <Image src={ process.env.REACT_APP_API_URL + data.photo} />
+                    : <DefaultAvatar name={data.fullName} width={90}/>
+                }
             </div>
             <div className="name">{data.fullName}</div>
             <div className="date">{data.birthday}</div>

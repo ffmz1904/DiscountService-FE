@@ -18,6 +18,9 @@ export const authorizeAction = () => async dispatch => {
 export const loginAction = (loginData) => async dispatch => {
     const response = await AdminRepo.login(loginData);
 
+    if (response.error) {
+        return false;
+    }
     localStorage.setItem('token', response.tokens.accessToken);
     localStorage.setItem('undefined', response.tokens.refreshToken);
     dispatch(setLogin(response.admin));

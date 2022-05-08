@@ -144,8 +144,10 @@ const EmployeesListItem = ({data}) => {
     return(
         <div className="EmployeesListItem">
             <div className="logo">
-                {/*<Image src={defaultImg} />*/}
-                <DefaultAvatar name={data.fullName} />
+                { data.photo
+                    ? <Image src={ process.env.REACT_APP_API_URL + data.photo} />
+                    : <DefaultAvatar name={data.fullName} />
+                }
             </div>
             <div className="name">{data.fullName}</div>
             <div className="date">{data.birthday}</div>
