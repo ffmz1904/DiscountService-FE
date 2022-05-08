@@ -104,7 +104,10 @@ const OrganizationsListItem = ({data, discountForYou}) => {
             onClick={() => history.push(ORGANIZATIONS_ROUTE + `/${data._id}`)}
         >
             <div className="logo">
-                <Image src={defaultImage} />
+                <Image src={data.logo
+                    ? process.env.REACT_APP_API_URL + data.logo
+                    : defaultImage
+                } />
             </div>
             <div className="name">{data.name}</div>
             <div className="description">{data.description}</div>

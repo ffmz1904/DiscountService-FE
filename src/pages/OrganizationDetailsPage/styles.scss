@@ -19,6 +19,9 @@
           border-radius: 100%;
 
           img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
             border-radius: 100%;
           }
         }
@@ -182,6 +185,7 @@
           img {
             width: 90px;
             height: 90px;
+            object-fit: cover;
             border-radius: 100%;
           }
         }

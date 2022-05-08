@@ -58,7 +58,10 @@ const MyOrganization = ({data, employeesCount}) => {
           <div className="columns">
               <div className="left">
                  <div className="logo">
-                     <Image src={defaultImg} />
+                     <Image src={data.logo
+                         ? process.env.REACT_APP_API_URL + data.logo
+                         : defaultImg
+                     } />
                  </div>
               </div>
               <div className="right">
@@ -104,7 +107,10 @@ const OrganizationsListItem = ({data, discountForYou}) => {
     return (
         <div className="OrganizationsListItem" onClick={() => redirectToOrgPage()}>
             <div className="logo">
-                <Image src={defaultImg} />
+                <Image src={data.logo
+                    ? process.env.REACT_APP_API_URL + data.logo
+                    : defaultImg
+                } />
             </div>
             <div className="name">{data.name}</div>
             <div className="discount">

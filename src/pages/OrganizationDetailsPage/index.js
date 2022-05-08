@@ -140,7 +140,10 @@ const OrganizationData = ({
             <div className="columns">
                 <div className="left">
                     <div className="logo">
-                        <Image src={defaultImg} />
+                        <Image src={data.orgData.logo
+                            ? process.env.REACT_APP_API_URL + data.orgData.logo
+                            : defaultImg
+                        } />
                     </div>
                 </div>
                 <div className="right">

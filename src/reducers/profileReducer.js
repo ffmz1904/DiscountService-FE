@@ -8,6 +8,8 @@ export default (state = defaultState, action) => {
     switch (action.type) {
         case PROFILE.GET_DATA:
             return { ...state, ...action.data };
+        case PROFILE.UPDATE_DATA:
+            return { ...state, ...action.data };
         default:
             return state;
     }

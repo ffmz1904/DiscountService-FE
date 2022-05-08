@@ -28,4 +28,5 @@ export const EMPLOYEES = {
 
 export const PROFILE = {
     GET_DATA: 'PROFILE_GET_DATA',
+    UPDATE_DATA: 'PROFILE_UPDATE_DATA',
 }

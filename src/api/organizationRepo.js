@@ -29,3 +29,13 @@ export const getMyOrganization = async () => {
         return data;
     }
 };
+
+export const updateMyOrganization = async (updateData) => {
+    try {
+        const {data} = await $authHost.put('api/org/my', updateData);
+        return data;
+    } catch (e) {
+        const {data} = e.response;
+        return data;
+    }
+};
