@@ -83,7 +83,7 @@ const OrganizationsList = ({data, myOrgId, searchString}) => {
                 <div className="description">Опис</div>
                 <div className="discount">Знижка <br/> (для вас / надана)</div>
             </div>
-            { organizations.length
+            { organizations.length > 0
                 ? organizations.map(el => <OrganizationsListItem
                     key={el._id}
                     data={el}

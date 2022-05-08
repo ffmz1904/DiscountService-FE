@@ -99,13 +99,11 @@ const OrganizationDetailsPage = ({
                 onSetDiscountTap={() => setDiscountModal(true)}
                 onRemoveDiscountTap={() => setDeleteDiscountModal(true)}
             />
-            { data.employees.length &&
-                <EmployeesTable
-                    data={data.employees}
-                    searchString={data.searchString}
-                    onFilterChanged={filterEmployeeAction}
-                />
-            }
+            <EmployeesTable
+                data={data.employees}
+                searchString={data.searchString}
+                onFilterChanged={filterEmployeeAction}
+            />
         </div>
     );
 };
@@ -256,7 +254,7 @@ const EmployeesTable = ({data, searchString, onFilterChanged}) => {
                 </div>
             </div>
             <div className="elWrapper">
-                { employees.length
+                { employees.length >  0
                     ? employees.map(el => <EmployeesTableItem key={el._id} data={el} />)
                     : <div className="empty">Працівників не знайдено</div>
                 }
