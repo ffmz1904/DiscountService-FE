@@ -15,6 +15,7 @@ import defaultImg from "../../assets/img/default-img.svg";
 import ModalWindow from "../../components/ModalWindow";
 import defaultImage from "../../assets/img/default-img.svg";
 import DefaultAvatar from "../../components/DefaultAvatar";
+import {employeeRoleToString} from "../../utils/constants/employee_roles";
 
 const OrganizationDetailsPage = ({
     fetchDataAction,
@@ -276,6 +277,7 @@ const EmployeesTableItem = ({data}) => {
                 }
             </div>
             <div className="name">{data.fullName}</div>
+            <div className="role">{employeeRoleToString(data.role)}</div>
             <div className="date">{data.birthday}</div>
         </div>
     );

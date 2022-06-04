@@ -9,6 +9,7 @@ import LoaderWidget from "../../components/LoaderWidget";
 import {useHistory} from "react-router-dom";
 import {ORGANIZATIONS_ROUTE} from "../../routes/routesConstant";
 import DefaultAvatar from "../../components/DefaultAvatar";
+import {employeeRoleToString} from "../../utils/constants/employee_roles";
 
 const DashboardPage = ({
     fetchDataAction,
@@ -130,7 +131,7 @@ const EmployeesList = ({employeesList}) => {
                 <div className="header">
                     <div className="logo"/>
                     <div className="name">Ф.І.О.</div>
-                    <div className="date">Дата</div>
+                    <div className="role">Роль</div>
                 </div>
                 {
                     employeesList.map(el => <EmployeesListItem key={el._id} data={el} />)
@@ -150,7 +151,7 @@ const EmployeesListItem = ({data}) => {
                 }
             </div>
             <div className="name">{data.fullName}</div>
-            <div className="date">{data.birthday}</div>
+            <div className="role">{employeeRoleToString(data.role)}</div>
         </div>
     );
 }
