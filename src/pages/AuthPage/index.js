@@ -182,6 +182,7 @@ const LoginForm = ({
                 <Input
                     fluid
                     placeholder='Пароль'
+                    type="password"
                     value={password}
                     onChange={(e) => {
                         skipError('password');
@@ -248,6 +249,7 @@ const RegistrationForm = ({
                     fluid
                     placeholder='Пароль'
                     value={password}
+                    type="password"
                     onChange={(e) => {
                         skipError('password');
                         changePassword(e.target.value);
@@ -258,6 +260,7 @@ const RegistrationForm = ({
                     fluid
                     placeholder='Підтвердіть пароль'
                     value={confirmPassword}
+                    type="password"
                     onChange={(e) => {
                         skipError('confirmPassword');
                         skipError('password');
