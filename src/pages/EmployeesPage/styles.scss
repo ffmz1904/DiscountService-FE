@@ -180,4 +180,27 @@
       margin-bottom: 15px;
     }
   }
+
+  .dateOfBirth {
+    display: flex;
+    width: 100%;
+
+    .calendarIcon {
+      width: 50px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      i {
+        position: relative;
+        top: -3px;
+      }
+
+      &:hover {
+        background: $grey_2;
+        cursor: pointer;
+      }
+    }
+  }
 }

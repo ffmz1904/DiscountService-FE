@@ -16,6 +16,7 @@ import DefaultAvatar from "../../components/DefaultAvatar";
 import {prepareImgUpload} from "../../utils/imgUtils";
 import EmployeeRolesSelector from "../../components/EmployeeRolesSelector";
 import {employeeRoleToString} from "../../utils/constants/employee_roles";
+import CalendarWidgetPopup from "../../components/CalendarWidgetPopup";
 
 const EmployeesPage = ({
     fetchDataAction,
@@ -35,6 +36,7 @@ const EmployeesPage = ({
     const [role, setRole] = useState(null);
     const [file, setFile] = useState(undefined);
     const [photo, setPhoto] = useState(undefined);
+    const [openCalendar, setOpenCalendar] = useState(false);
 
     useEffect(() => {
         fetchDataAction(myOrgId)
@@ -133,6 +135,7 @@ const EmployeesPage = ({
                     setImg={setPhoto}
                     file={file}
                     setFile={setFile}
+                    onCalendarOpen={() => setOpenCalendar(true)}
                 />}
                 onSuccess={() => createEmployeeHandler()}
                 onReject={() => clearCreatingFields()}
@@ -158,6 +161,7 @@ const EmployeesPage = ({
                     setImg={setPhoto}
                     file={file}
                     setFile={setFile}
+                    onCalendarOpen={() => setOpenCalendar(true)}
                 />}
                 onSuccess={() => updateEmployeeHandler()}
                 onReject={() => clearCreatingFields()}
@@ -169,6 +173,12 @@ const EmployeesPage = ({
                 modalWidth='500px'
                 body={'Дані неможливо буде відновити. \n Ви впевнені що хочете видалити працівника?'}
                 onSuccess={() => removeEmployeeHandler()}
+            />
+            <CalendarWidgetPopup
+                isOpen={openCalendar}
+                onDateChanged={setBirthday}
+                onClose={() => setOpenCalendar(false)}
+                strValue={birthday}
             />
         </>
     };
@@ -295,6 +305,7 @@ const CreateEmployeeModal = ({
     setFile,
     img,
     setImg,
+    onCalendarOpen,
 }) => {
     const handleUploadFile = e => {
         return prepareImgUpload(e, setImg, setFile);
@@ -324,14 +335,18 @@ const CreateEmployeeModal = ({
                 onChange={(e) => setName(e.target.value)}
                 // error={name}
             />
-            <Input
-                label={'Дата народження'}
-                fluid
-                placeholder='Дата народження ...'
-                value={birthday}
-                onChange={(e) => setBirthday(e.target.value)}
-                // error={name}
-            />
+            <div className="dateOfBirth">
+                <Input
+                    label={'Дата народження'}
+                    fluid
+                    placeholder='Дата народження ...'
+                    value={birthday}
+                    // error={name}
+                />
+                <div className="calendarIcon" onClick={() => onCalendarOpen()}>
+                    <Icon name='calendar alternate outline' />
+                </div>
+            </div>
             <EmployeeRolesSelector
                 role={role}
                 onChange={setRole}
