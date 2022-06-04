@@ -1,0 +1,28 @@
+.EmployeeRolesSelector {
+  display: flex;
+  width: 100%;
+
+  .label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5833em 0.833em;
+    background: #e8e8e8;
+    color: rgba(0,0,0,.6);
+    border-top-left-radius: 0.28571429rem;
+    border-bottom-left-radius: 0.28571429rem;
+    font-size: 14px;
+    font-weight: bold;
+    position: relative;
+    z-index: 1;
+  }
+
+  .ui.selection.dropdown {
+    flex: 1 1 auto;
+    position: relative;
+    z-index: 0;
+    border-radius: 0;
+    border-top-right-radius: 0.28571429rem;
+    border-bottom-right-radius: 0.28571429rem;
+  }
+}

@@ -14,6 +14,8 @@ import LoaderWidget from "../../components/LoaderWidget";
 import ModalWindow from "../../components/ModalWindow";
 import DefaultAvatar from "../../components/DefaultAvatar";
 import {prepareImgUpload} from "../../utils/imgUtils";
+import EmployeeRolesSelector from "../../components/EmployeeRolesSelector";
+import {employeeRoleToString} from "../../utils/constants/employee_roles";
 
 const EmployeesPage = ({
     fetchDataAction,
@@ -30,6 +32,7 @@ const EmployeesPage = ({
     const [removeUserId, setRemoveUserId] = useState(null);
     const [name, setName] = useState('');
     const [birthday, setBirthday] = useState('');
+    const [role, setRole] = useState(null);
     const [file, setFile] = useState(undefined);
     const [photo, setPhoto] = useState(undefined);
 
@@ -51,7 +54,8 @@ const EmployeesPage = ({
         const employee = {
             name: name,
             organizationId: myOrgId,
-            birthday: birthday
+            birthday: birthday,
+            role: role,
         }
 
         if (file) {
@@ -68,7 +72,8 @@ const EmployeesPage = ({
     const updateEmployeeHandler = (employee = null) => {
         if (employee !== null) {
             setName(employee.fullName);
-            setBirthday(employee.birthday)
+            setBirthday(employee.birthday);
+            setRole(employee.role);
             setPhoto(employee.photo);
             setEditUserId(employee._id);
             return true;
@@ -77,6 +82,7 @@ const EmployeesPage = ({
         const updateData = {
             fullName: name,
             birthday,
+            role,
         }
 
         if (file) {
@@ -99,6 +105,7 @@ const EmployeesPage = ({
     const clearCreatingFields = () => {
         setName('');
         setBirthday('');
+        setRole(null);
         setFile(undefined);
         setPhoto(undefined);
     }
@@ -120,6 +127,8 @@ const EmployeesPage = ({
                     setName={setName}
                     birthday={birthday}
                     setBirthday={setBirthday}
+                    role={role}
+                    setRole={setRole}
                     img={photo}
                     setImg={setPhoto}
                     file={file}
@@ -143,6 +152,8 @@ const EmployeesPage = ({
                     setName={setName}
                     birthday={birthday}
                     setBirthday={setBirthday}
+                    role={role}
+                    setRole={setRole}
                     img={photo}
                     setImg={setPhoto}
                     file={file}
@@ -232,6 +243,7 @@ const EmployeesList = ({data, searchString, onEditTap, onRemoveTap}) => {
             <div className="header">
                 <div className="logo"/>
                 <div className="name">Ф.І.О.</div>
+                <diiv className="role">Роль</diiv>
                 <div className="date">Дата</div>
                 <div className="actions"/>
             </div>
@@ -258,6 +270,7 @@ const EmployeesListItem = ({data, onEditTap, onRemoveTap}) => {
                 }
             </div>
             <div className="name">{data.fullName}</div>
+            <div className="role">{employeeRoleToString(data.role)}</div>
             <div className="date">{data.birthday}</div>
             <div className="actions">
                 <span className="edit" onClick={onEditTap}>
@@ -276,6 +289,8 @@ const CreateEmployeeModal = ({
     setName,
     birthday,
     setBirthday,
+    role,
+    setRole,
     file,
     setFile,
     img,
@@ -316,6 +331,10 @@ const CreateEmployeeModal = ({
                 value={birthday}
                 onChange={(e) => setBirthday(e.target.value)}
                 // error={name}
+            />
+            <EmployeeRolesSelector
+                role={role}
+                onChange={setRole}
             />
         </div>
     );
