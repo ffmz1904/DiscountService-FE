@@ -7,13 +7,15 @@ import {
     fetchDataAction,
     filterEmployeeAction,
     removeDiscountAction,
-    setDiscountAction
+    setDiscountAction,
+    setPersonalDiscount,
+    removePersonalDiscount
 } from "../../actions/organizationDetailsActions";
+import {updateDiscount} from '../../actions/employeesActions';
 import LoaderWidget from "../../components/LoaderWidget";
 import {Icon, Image, Input} from "semantic-ui-react";
 import defaultImg from "../../assets/img/default-img.svg";
 import ModalWindow from "../../components/ModalWindow";
-import defaultImage from "../../assets/img/default-img.svg";
 import DefaultAvatar from "../../components/DefaultAvatar";
 import {employeeRoleToString} from "../../utils/constants/employee_roles";
 
@@ -22,19 +24,28 @@ const OrganizationDetailsPage = ({
     setDiscountAction,
     removeDiscountAction,
     filterEmployeeAction,
+    setPersonalDiscount,
+    removePersonalDiscount,
     data = null,
+    myOrgId,
 }) => {
     const params = useParams();
 
     const [isLoading, setIsLoading] = useState(true);
     const [showDiscountMenu, setShowDiscountMenu] = useState(false);
+    const [showUserDiscountMenu, setShowUserDiscountMenu] = useState(null);
     const [discountModal, setDiscountModal] = useState(false);
+    const [userDiscountModal, setUserDiscountModal] = useState(null);
     const [discountValue, setDiscountValue] = useState('');
     const [deleteDiscountModal, setDeleteDiscountModal] = useState(false);
+    const [deleteUserDiscountModal, setDeleteUserDiscountModal] = useState(null);
 
     const clearActionHandler = () => {
         if (showDiscountMenu) {
             setShowDiscountMenu(false);
+        }
+        if (showUserDiscountMenu) {
+            setShowUserDiscountMenu(false);
         }
     }
 
@@ -52,6 +63,30 @@ const OrganizationDetailsPage = ({
     const handleDeleteDiscount = () => {
         removeDiscountAction(params.id)
             .then(() => setDeleteDiscountModal(false));
+    }
+
+    const handleSetUserDiscountTap = (userId) => {
+        if (discountValue < 1 || discountValue > 99) {
+            return false;
+        }
+        setPersonalDiscount(userId, Number(discountValue))
+            .then(() => {
+                setUserDiscountModal(null);
+                setDiscountValue('');
+            });
+    }
+
+    const handleRemoveUserDiscountTap = (userId) => {
+        removePersonalDiscount(userId)
+            .then(() => setDeleteUserDiscountModal(null));
+    }
+
+    const getUserName = (userId) => {
+        const user = data.employees.filter(user => user._id === userId);
+        if (user.length) {
+            return user[0].fullName;
+        }
+        return '';
     }
 
     useEffect(() => {
@@ -72,11 +107,27 @@ const OrganizationDetailsPage = ({
             />
             <ModalWindow
                 isOpen={deleteDiscountModal}
-                onClose={() => setDiscountModal(false)}
+                onClose={() => setDeleteDiscountModal(false)}
                 onSuccess={() => handleDeleteDiscount()}
                 headerText={`Відмінити знижку для ${data.orgData.name}?`}
                 modalWidth='400px'
                 body={`Ви впевнені що хочете відмінити знижку для ${data.orgData.name}?`}
+            />
+            <ModalWindow
+                isOpen={userDiscountModal != null}
+                onClose={() => setUserDiscountModal(null)}
+                onSuccess={() => handleSetUserDiscountTap(userDiscountModal)}
+                headerText={`Знижка для ${getUserName(userDiscountModal)}`}
+                modalWidth='400px'
+                body={<SetDiscountModal discount={discountValue} setDiscount={setDiscountValue} />}
+            />
+            <ModalWindow
+                isOpen={deleteUserDiscountModal !== null}
+                onClose={() => setDeleteUserDiscountModal(null)}
+                onSuccess={() => handleRemoveUserDiscountTap(deleteUserDiscountModal)}
+                headerText={`Відмінити знижку для ${getUserName(deleteUserDiscountModal)}?`}
+                modalWidth='400px'
+                body={`Ви впевнені що хочете відмінити знижку для ${getUserName(deleteUserDiscountModal)}?`}
             />
         </>);
     }
@@ -104,6 +155,11 @@ const OrganizationDetailsPage = ({
                 data={data.employees}
                 searchString={data.searchString}
                 onFilterChanged={filterEmployeeAction}
+                showMenu={showUserDiscountMenu}
+                setShowMenu={setShowUserDiscountMenu}
+                currentOrgId={myOrgId}
+                onSetDiscountTap={() => setUserDiscountModal(showUserDiscountMenu)}
+                onRemoveDiscountTap={setDeleteUserDiscountModal}
             />
         </div>
     );
@@ -114,6 +170,8 @@ const actions = {
     setDiscountAction,
     removeDiscountAction,
     filterEmployeeAction,
+    setPersonalDiscount,
+    removePersonalDiscount,
 };
 const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);
 const mapStateToProps = ({organizationDetails, admin}) => ({
@@ -181,8 +239,6 @@ const OrganizationData = ({
             />
         </div>
     );
-
-
 }
 
 const DiscountInfo = ({myOrgId, currentOrgId, discountsFromOrg, discountsForOrg}) => {
@@ -234,7 +290,16 @@ const SetDiscountModal = ({ discount, setDiscount }) => {
     );
 }
 
-const EmployeesTable = ({data, searchString, onFilterChanged}) => {
+const EmployeesTable = ({
+    data,
+    searchString,
+    onFilterChanged,
+    showMenu,
+    setShowMenu,
+    currentOrgId,
+    onSetDiscountTap,
+    onRemoveDiscountTap
+}) => {
     const employees = searchString === ''
         ? data
         : data.filter(el => {
@@ -259,7 +324,15 @@ const EmployeesTable = ({data, searchString, onFilterChanged}) => {
             </div>
             <div className="elWrapper">
                 { employees.length >  0
-                    ? employees.map(el => <EmployeesTableItem key={el._id} data={el} />)
+                    ? employees.map(el => <EmployeesTableItem
+                        key={el._id}
+                        data={el}
+                        showMenu={showMenu}
+                        setShowMenu={setShowMenu}
+                        currentOrgId={currentOrgId}
+                        onSetDiscountTap={onSetDiscountTap}
+                        onRemoveDiscountTap={onRemoveDiscountTap}
+                    />)
                     : <div className="empty">Працівників не знайдено</div>
                 }
             </div>
@@ -267,9 +340,40 @@ const EmployeesTable = ({data, searchString, onFilterChanged}) => {
     );
 }
 
-const EmployeesTableItem = ({data}) => {
+const EmployeesTableItem = ({
+    data,
+    showMenu,
+    setShowMenu,
+    currentOrgId,
+    onSetDiscountTap,
+    onRemoveDiscountTap,
+}) => {
+    const hasPersonalDiscount = data.personalDiscounts.filter(discount => discount.id === currentOrgId).length !== 0
+        ? data.personalDiscounts.filter(discount => discount.id === currentOrgId)[0]
+        : null;
+
     return(
         <div className="EmployeesTableItem">
+            <div className="actions">
+                <Icon name='ellipsis vertical' onClick={() => setShowMenu(data._id)} />
+                { showMenu === data._id &&
+                    <div className="menu">
+                        <div className="set"
+                             onClick={onSetDiscountTap}
+                        >
+                            { !hasPersonalDiscount ?
+                                'Надати знижку' :
+                                'Оновити знижку'
+                            }
+                        </div>
+                        { hasPersonalDiscount &&
+                            <div className="remove" onClick={() => onRemoveDiscountTap(data._id)}>
+                                Відмінити знижку
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
             <div className="logo">
                 { data.photo
                     ? <Image src={ process.env.REACT_APP_API_URL + data.photo} />
@@ -278,6 +382,9 @@ const EmployeesTableItem = ({data}) => {
             </div>
             <div className="name">{data.fullName}</div>
             <div className="role">{employeeRoleToString(data.role)}</div>
+            <div className="personalDiscount">
+                {hasPersonalDiscount ? `Персональна знижка - ${hasPersonalDiscount.percent}%` : ''}
+            </div>
             <div className="date">{data.birthday}</div>
         </div>
     );
