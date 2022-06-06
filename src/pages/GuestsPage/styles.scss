@@ -1,0 +1,206 @@
+@import "src/styles/colors";
+
+#GuestsPage {
+
+  .SearchBar {
+    width: 100%;
+    padding: 10px 15px;
+    background: $white;
+    box-shadow: $shadow;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .searchWrapper {
+      .ui.input {
+        width: 450px;
+
+        input {
+          color: $grey;
+          &:focus {
+            color: $green;
+            border-color: $green;
+          }
+        }
+      }
+    }
+  }
+
+  .EmployeesList {
+    background: $white;
+    border-radius: 5px;
+    box-shadow: $shadow;
+    .header {
+      display: flex;
+      padding: 8px 10px;
+      background: $grey_2;
+
+      .logo {
+        width: 50px;
+      }
+
+      .name {
+        flex: 1 1 auto;
+        padding: 0 20px;
+      }
+
+      .role {
+        width: 200px;
+      }
+
+      .date {
+        width: 120px;
+      }
+
+      .actions {
+        width: 100px;
+      }
+    }
+
+    .EmployeesListItem {
+      display: flex;
+      padding: 8px 10px;
+      align-items: center;
+      border-bottom: 1.5px solid $white_2;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .logo {
+        width: 50px;
+        height: 50px;
+        border-radius: 100%;
+
+        img {
+          width: 50px;
+          height: 50px;
+          object-fit: cover;
+          border-radius: 100%;
+        }
+      }
+
+      .name {
+        flex: 1 1 auto;
+        padding: 0 20px;
+      }
+
+      .role {
+        width: 200px;
+      }
+
+      .date {
+        width: 120px;
+      }
+
+      .actions {
+        width: 100px;
+        display: flex;
+        justify-content: space-around;
+
+        .edit {
+          color: $grey;
+          &:hover {
+            color: black;
+            cursor: pointer;
+          }
+        }
+
+        .remove {
+          color: $grey;
+          &:hover {
+            color: black;
+            cursor: pointer;
+          }
+        }
+      }
+
+      &:hover {
+        cursor: pointer;
+        background: $grey_2op;
+      }
+    }
+
+    .empty {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: grey;
+    }
+  }
+}
+
+.CreateEmployeeModal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .logo {
+    width: 150px;
+    height: 150px;
+    border-radius: 100%;
+    margin-bottom: 10px;
+
+    img {
+      border-radius: 100%;
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+    }
+  }
+
+  .changeLogo {
+    margin-bottom: 15px;
+    label {
+      cursor: pointer;
+      color: $grey;
+
+      &:hover {
+        color: $green;
+      }
+    }
+
+    #upload-photo {
+      opacity: 0;
+      position: absolute;
+      z-index: -1;
+    }
+  }
+
+  .ui.input {
+    width: 100%;
+    margin-bottom: 15px;
+
+    &:first-child {
+      margin-bottom: 15px;
+    }
+  }
+
+  .dateOfBirth {
+    display: flex;
+    width: 100%;
+
+    .calendarIcon {
+      width: 50px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      i {
+        position: relative;
+        top: -3px;
+      }
+
+      &:hover {
+        background: $grey_2;
+        cursor: pointer;
+      }
+    }
+  }
+}

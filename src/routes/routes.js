@@ -5,6 +5,7 @@ import ProfilePage from "../pages/ProfilePage";
 import EmployeesPage from "../pages/EmployeesPage";
 import OrganizationsPage from "../pages/OrganizationsPage";
 import OrganizationDetailsPage from "../pages/OrganizationDetailsPage";
+import GuestsPage from "../pages/GuestsPage";
 
 export const publicRoutes = [
     {
@@ -27,6 +28,10 @@ export const authRoutes = [
         Component: EmployeesPage,
     },
     {
+        path: ROUTE.GUESTS_ROUTE,
+        Component: GuestsPage,
+    },
+    {
         path: ROUTE.ORGANIZATIONS_ROUTE,
         Component: OrganizationsPage,
     },
@@ -34,8 +39,4 @@ export const authRoutes = [
         path: ROUTE.ORGANIZATIONS_ROUTE + '/:id',
         Component: OrganizationDetailsPage,
     },
-    // {
-    //     path: ROUTE.DELIVERY_MEN_EARNING_ROUTE + '/:id',
-    //     Component: DeliveryManEarningPage,
-    // },
 ];

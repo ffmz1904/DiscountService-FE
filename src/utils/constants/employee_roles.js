@@ -7,7 +7,7 @@ export const EMPLOYEE_ROLES = {
 export const employeeRoleToString = (role) => {
     switch (role) {
         case 0:
-            return 'Гість';
+            return 'Клієнт';
         case 1:
             return 'Працівник';
         case 2:

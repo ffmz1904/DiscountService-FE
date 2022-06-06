@@ -24,6 +24,11 @@ const AppNavBar = () => {
                 />
                 <NavBarTab
                     icon='user outline'
+                    path={ROUTE.GUESTS_ROUTE}
+                    name='Клієнти'
+                />
+                <NavBarTab
+                    icon='user outline'
                     path={ROUTE.PROFILE_ROUTE}
                     name='Профіль'
                 />

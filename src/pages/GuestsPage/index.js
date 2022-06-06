@@ -14,26 +14,25 @@ import LoaderWidget from "../../components/LoaderWidget";
 import ModalWindow from "../../components/ModalWindow";
 import DefaultAvatar from "../../components/DefaultAvatar";
 import {prepareImgUpload} from "../../utils/imgUtils";
-import EmployeeRolesSelector from "../../components/EmployeeRolesSelector";
 import {EMPLOYEE_ROLES, employeeRoleToString} from "../../utils/constants/employee_roles";
 import CalendarWidgetPopup from "../../components/CalendarWidgetPopup";
 
-const EmployeesPage = ({
-    fetchDataAction,
-    createEmployeeAction,
-    updateEmployeeAction,
-    removeEmployeeAction,
-    filterEmployeeAction,
-    myOrgId,
-    data,
+const GuestsPage = ({
+   fetchDataAction,
+   createEmployeeAction,
+   updateEmployeeAction,
+   removeEmployeeAction,
+   filterEmployeeAction,
+   myOrgId,
+   data,
 }) => {
+    const role = EMPLOYEE_ROLES.GUEST;
     const [isLoading, setIsLoading] = useState(true);
     const [createModal, setCrateModal] = useState(false);
     const [editUserId, setEditUserId] = useState(null);
     const [removeUserId, setRemoveUserId] = useState(null);
     const [name, setName] = useState('');
     const [birthday, setBirthday] = useState('');
-    const [role, setRole] = useState(null);
     const [file, setFile] = useState(undefined);
     const [photo, setPhoto] = useState(undefined);
     const [openCalendar, setOpenCalendar] = useState(false);
@@ -75,7 +74,6 @@ const EmployeesPage = ({
         if (employee !== null) {
             setName(employee.fullName);
             setBirthday(employee.birthday);
-            setRole(employee.role);
             setPhoto(employee.photo);
             setEditUserId(employee._id);
             return true;
@@ -107,7 +105,6 @@ const EmployeesPage = ({
     const clearCreatingFields = () => {
         setName('');
         setBirthday('');
-        setRole(null);
         setFile(undefined);
         setPhoto(undefined);
     }
@@ -129,8 +126,6 @@ const EmployeesPage = ({
                     setName={setName}
                     birthday={birthday}
                     setBirthday={setBirthday}
-                    role={role}
-                    setRole={setRole}
                     img={photo}
                     setImg={setPhoto}
                     file={file}
@@ -155,8 +150,6 @@ const EmployeesPage = ({
                     setName={setName}
                     birthday={birthday}
                     setBirthday={setBirthday}
-                    role={role}
-                    setRole={setRole}
                     img={photo}
                     setImg={setPhoto}
                     file={file}
@@ -188,7 +181,7 @@ const EmployeesPage = ({
     }
 
     return (
-        <div id="EmployeesPage" className="Page">
+        <div id="GuestsPage" className="Page">
             {modalBuilder()}
             <SearchBar
                 onAddTap={() => setCrateModal(true)}
@@ -221,7 +214,7 @@ const mapStateToProps = ({admin, employees}) => ({
 export default connect(
     mapStateToProps,
     mapDispatchToProps,
-)(EmployeesPage);
+)(GuestsPage);
 
 const SearchBar = ({onAddTap, searchString, onFilterChanged}) => {
     return(
@@ -241,7 +234,7 @@ const SearchBar = ({onAddTap, searchString, onFilterChanged}) => {
 }
 
 const EmployeesList = ({data, searchString, onEditTap, onRemoveTap}) => {
-    const filterByRole = data.filter(emp => emp.role !== EMPLOYEE_ROLES.GUEST);
+    const filterByRole = data.filter(emp => emp.role === EMPLOYEE_ROLES.GUEST);
 
     const employees = searchString === ''
         ? filterByRole
@@ -250,7 +243,6 @@ const EmployeesList = ({data, searchString, onEditTap, onRemoveTap}) => {
             const exist = parts.filter(part => part.toLowerCase().includes(searchString.toLowerCase()));
             return exist.length !== 0 || el.fullName.toLowerCase().includes(searchString.toLowerCase());
         });
-
     return(
         <div className="EmployeesList">
             <div className="header">
@@ -298,18 +290,15 @@ const EmployeesListItem = ({data, onEditTap, onRemoveTap}) => {
 }
 
 const CreateEmployeeModal = ({
-    name,
-    setName,
-    birthday,
-    setBirthday,
-    role,
-    setRole,
-    file,
-    setFile,
-    img,
-    setImg,
-    onCalendarOpen,
-}) => {
+     name,
+     setName,
+     birthday,
+     file,
+     setFile,
+     img,
+     setImg,
+     onCalendarOpen,
+ }) => {
     const handleUploadFile = e => {
         return prepareImgUpload(e, setImg, setFile);
     };
@@ -336,7 +325,6 @@ const CreateEmployeeModal = ({
                 placeholder='Введіть П.І.Б. ...'
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                // error={name}
             />
             <div className="dateOfBirth">
                 <Input
@@ -344,17 +332,11 @@ const CreateEmployeeModal = ({
                     fluid
                     placeholder='Дата народження ...'
                     value={birthday}
-                    // error={name}
                 />
                 <div className="calendarIcon" onClick={() => onCalendarOpen()}>
                     <Icon name='calendar alternate outline' />
                 </div>
             </div>
-            <EmployeeRolesSelector
-                role={role}
-                onChange={setRole}
-                hideRole={[EMPLOYEE_ROLES.GUEST]}
-            />
         </div>
     );
 }
