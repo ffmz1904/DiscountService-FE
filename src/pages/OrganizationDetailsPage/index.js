@@ -312,7 +312,7 @@ const EmployeesTable = ({
             <div className="header">
                 <div className="title">
                     <Icon name="users"/>
-                    <span>Працівники/Клієнтиç</span>
+                    <span>Працівники/Клієнти</span>
                 </div>
                 <div className="searchWrapper">
                     <Input
